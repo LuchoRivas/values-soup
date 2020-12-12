@@ -17,7 +17,6 @@ def __eq__(self, other):
     return ((self["blue"]["buy"] == other["blue"]["buy"]) and (self["blue"]["sell"] == other["blue"]["sell"]))
 
 
-
 def getValues():
     url = "https://www.dolarhoy.com/"
     page = requests.get(url)
@@ -32,6 +31,7 @@ def getValues():
     precio_venta_bolsa = prices[5].text
     precio_compra_liqui = prices[6].text
     precio_venta_liqui = prices[7].text
+    precio_venta_solidario = prices[8].text
 
     newValues = {
         "oficial": {
@@ -52,6 +52,10 @@ def getValues():
         "liqui": {
             "buy": precio_compra_liqui,
             "sell": precio_venta_liqui,
+            "date": datetime.now()
+        },
+        "solidario": {
+            "buy": precio_venta_solidario,
             "date": datetime.now()
         },
         "creationDate": datetime.now()
