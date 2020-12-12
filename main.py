@@ -16,6 +16,8 @@ types_collection = client.db.types
 def __eq__(self, other):
     return ((self["blue"]["buy"] == other["blue"]["buy"]) and (self["blue"]["sell"] == other["blue"]["sell"]))
 
+# main
+
 
 def getValues():
     url = "https://www.dolarhoy.com/"
@@ -61,6 +63,7 @@ def getValues():
         "creationDate": datetime.now()
     }
 
+    # last registry from mongo db
     dbValues = getDbValues()
 
     if(dbValues == None):
@@ -68,12 +71,15 @@ def getValues():
         saveValues(values_to_save)
 
     else:
+        # compare mongo db with newValues, if __eq__ is false save a new values
         equals = __eq__(dbValues, newValues)
         if(equals):
             return
         else:
             values_to_save = addTypes(newValues)
             saveValues(values_to_save)
+
+# types of values relationship
 
 
 def addTypes(values):
@@ -101,8 +107,15 @@ def addTypes(values):
             liqui["name"] = types[3]["name"]
             liqui["_id"] = types[3]["_id"]
             values["liqui"] = liqui
+        if(value == "solidario"):
+            solidario = values["solidario"]
+            solidario["name"] = types[4]["name"]
+            solidario["_id"] = types[4]["_id"]
+            values["solidario"] = solidario
 
     return values
+
+# try to save values to mongo db
 
 
 def saveValues(values):
@@ -112,6 +125,8 @@ def saveValues(values):
 
     except Exception as e:
         print('an error occurred trying to save values >>', e)
+
+# gets the last saved values to compare with newValues
 
 
 def getDbValues():
