@@ -6,9 +6,10 @@ from datetime import datetime
 from bson.objectid import ObjectId
 from consts import MONGO_URI
 from bson.json_util import dumps
+import locale
 
+locale.setlocale(locale.LC_ALL, 'es_AR.UTF8')
 client = pymongo.MongoClient(MONGO_URI)
-
 collection = client.db.values
 types_collection = client.db.types
 
@@ -25,7 +26,7 @@ def getValues():
     soup = BeautifulSoup(page.content, "html.parser")
 
     prices = soup.find_all('span', class_='price')
-    precio_compra_oficial = prices[0].text
+    precio_compra_oficial = prices[0].text.strip()
     precio_venta_oficial = prices[1].text
     precio_compra_blue = prices[2].text
     precio_venta_blue = prices[3].text
@@ -37,27 +38,27 @@ def getValues():
 
     newValues = {
         "oficial": {
-            "buy": precio_compra_oficial.strip(),
-            "sell": precio_venta_oficial,
+            "buy": locale.atof(precio_compra_oficial.strip("$")),
+            "sell": locale.atof(precio_venta_oficial.strip("$")),
             "date": datetime.now()
         },
         "blue": {
-            "buy": precio_compra_blue,
-            "sell": precio_venta_blue,
+            "buy":  locale.atof(precio_compra_blue.strip("$")),
+            "sell": locale.atof(precio_venta_blue.strip("$")),
             "date": datetime.now()
         },
         "bolsa": {
-            "buy": precio_compra_bolsa,
-            "sell": precio_venta_bolsa,
+            "buy": locale.atof(precio_compra_bolsa.strip("$")),
+            "sell": locale.atof(precio_venta_bolsa.strip("$")),
             "date": datetime.now()
         },
         "liqui": {
-            "buy": precio_compra_liqui,
-            "sell": precio_venta_liqui,
+            "buy": locale.atof(precio_compra_liqui.strip("$")),
+            "sell": locale.atof(precio_venta_liqui.strip("$")),
             "date": datetime.now()
         },
         "solidario": {
-            "buy": precio_venta_solidario,
+            "sell": locale.atof(precio_venta_solidario.strip("$")),
             "date": datetime.now()
         },
         "creationDate": datetime.now()
