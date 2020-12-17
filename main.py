@@ -8,7 +8,7 @@ from consts import MONGO_URI
 from bson.json_util import dumps
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_AR.UTF8')
+locale.setlocale(locale.LC_ALL, 'es_AR.utf8')
 client = pymongo.MongoClient(MONGO_URI)
 collection = client.db.values
 types_collection = client.db.types
