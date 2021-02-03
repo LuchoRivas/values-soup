@@ -24,10 +24,10 @@ def getValues():
     soup = BeautifulSoup(page.content, "html.parser")
 
     prices = soup.find_all('div', class_='val')
-    precio_compra_oficial = prices[0].text.strip()
-    precio_venta_oficial = prices[1].text
-    precio_compra_blue = prices[2].text
-    precio_venta_blue = prices[3].text
+    precio_compra_blue = prices[0].text.strip()
+    precio_venta_blue = prices[1].text
+    precio_compra_oficial = prices[2].text
+    precio_venta_oficial = prices[3].text
     precio_compra_bolsa = prices[4].text
     precio_venta_bolsa = prices[5].text
     precio_compra_liqui = prices[6].text
