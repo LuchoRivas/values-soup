@@ -6,9 +6,7 @@ from datetime import datetime
 from bson.objectid import ObjectId
 from consts import MONGO_URI
 from bson.json_util import dumps
-import locale
 
-locale.setlocale(locale.LC_ALL, 'es_AR.UTF8')
 client = pymongo.MongoClient(MONGO_URI)
 collection = client.db.values
 types_collection = client.db.types
@@ -25,7 +23,7 @@ def getValues():
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
 
-    prices = soup.find_all('span', class_='price')
+    prices = soup.find_all('div', class_='val')
     precio_compra_oficial = prices[0].text.strip()
     precio_venta_oficial = prices[1].text
     precio_compra_blue = prices[2].text
@@ -38,27 +36,27 @@ def getValues():
 
     newValues = {
         "oficial": {
-            "buy": locale.atof(precio_compra_oficial.strip("$")),
-            "sell": locale.atof(precio_venta_oficial.strip("$")),
+            "buy": float(precio_compra_oficial.strip("$")),
+            "sell": float(precio_venta_oficial.strip("$")),
             "date": datetime.now()
         },
         "blue": {
-            "buy":  locale.atof(precio_compra_blue.strip("$")),
-            "sell": locale.atof(precio_venta_blue.strip("$")),
+            "buy":  float(precio_compra_blue.strip("$")),
+            "sell": float(precio_venta_blue.strip("$")),
             "date": datetime.now()
         },
         "bolsa": {
-            "buy": locale.atof(precio_compra_bolsa.strip("$")),
-            "sell": locale.atof(precio_venta_bolsa.strip("$")),
+            "buy": float(precio_compra_bolsa.strip("$")),
+            "sell": float(precio_venta_bolsa.strip("$")),
             "date": datetime.now()
         },
         "liqui": {
-            "buy": locale.atof(precio_compra_liqui.strip("$")),
-            "sell": locale.atof(precio_venta_liqui.strip("$")),
+            "buy": float(precio_compra_liqui.strip("$")),
+            "sell": float(precio_venta_liqui.strip("$")),
             "date": datetime.now()
         },
         "solidario": {
-            "sell": locale.atof(precio_venta_solidario.strip("$")),
+            "sell": float(precio_venta_solidario.strip("$")),
             "date": datetime.now()
         },
         "creationDate": datetime.now()
