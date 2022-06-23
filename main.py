@@ -15,9 +15,7 @@ types_collection = client.db.types
 def __eq__(self, other):
     return ((self["blue"]["buy"] == other["blue"]["buy"]) and (self["blue"]["sell"] == other["blue"]["sell"]))
 
-# main function to get the values from 'dolar hoy' site
-# HTML gets parsed and divided every US dolar value by their type
-# Values captured are strings '$ 100', simbol are stripped and value casted to float
+# main
 
 
 def getValues():
@@ -67,7 +65,6 @@ def getValues():
     # last registry from mongo db
     dbValues = getDbValues()
 
-    # Init with a empty DB
     if(dbValues == None):
         values_to_save = addTypes(newValues)
         saveValues(values_to_save)
@@ -117,7 +114,7 @@ def addTypes(values):
 
     return values
 
-# Saving function: Values gets stored into mongo db
+# try to save values to mongo db
 
 
 def saveValues(values):
@@ -140,14 +137,11 @@ def getDbValues():
     except Exception as e:
         print('an error occurred trying get values from db >>', e)
 
-# This runs every minute
-
 
 def execute():
     getValues()
     time.sleep(60)
 
 
-# Infinite loop
 while True:
     execute()
