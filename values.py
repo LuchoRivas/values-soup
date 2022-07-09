@@ -63,10 +63,10 @@ def soupResponseParser(soupValuesElements):
             contents = soupValueElement.contents
             for content in contents:
                 if content.text != '':
-                    # from: https://stackoverflow.com/questions/4289331/how-to-extract-numbers-from-a-string-in-python
-                    extractIntegerFromText = [
-                        int(s) for s in re.findall(r'\b\d+\b', content.text)]
-                    finalPrice = extractIntegerFromText[0]
+                    extractIntegerFromText = re.findall(
+                        r"[-+]?(?:\d*\.\d+|\d+)", content.text
+                    )
+                    finalPrice = float(extractIntegerFromText[0])
 
                     if title == VALUE_TYPES.TYPE_BLUE.value:
                         if content.text.startswith(VALUE_ACTIONS.ACTION_BUY.value):
@@ -92,8 +92,8 @@ def soupResponseParser(soupValuesElements):
                         if content.text.startswith(VALUE_ACTIONS.ACTION_SELL.value):
                             newValues["bolsa"]["sell"] = finalPrice
 
-                        newValues["blue"]["name"] = valuesTypes[1]["name"]
-                        newValues["blue"]["_id"] = valuesTypes[1]["_id"]
+                        newValues["bolsa"]["name"] = valuesTypes[1]["name"]
+                        newValues["bolsa"]["_id"] = valuesTypes[1]["_id"]
 
                     if title == VALUE_TYPES.TYPE_LIQUI.value:
                         if content.text.startswith(VALUE_ACTIONS.ACTION_BUY.value):
@@ -113,8 +113,12 @@ def soupResponseParser(soupValuesElements):
                         newValues["cripto"]["name"] = valuesTypes[5]["name"]
                         newValues["cripto"]["_id"] = valuesTypes[5]["_id"]
 
-                    else:
-                        newValues["solidario"]["sell"] = finalPrice
+                    if title == VALUE_TYPES.TYPE_CRYPTO.value:
+                        if content.text.startswith(VALUE_ACTIONS.ACTION_BUY.value):
+                            newValues["solidario"]["buy"] = finalPrice
+                        if content.text.startswith(VALUE_ACTIONS.ACTION_SELL.value):
+                            newValues["solidario"]["sell"] = finalPrice
+
                         newValues["solidario"]["name"] = valuesTypes[4]["name"]
                         newValues["solidario"]["_id"] = valuesTypes[4]["_id"]
 
