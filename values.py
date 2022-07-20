@@ -7,7 +7,7 @@ import re
 client = pymongo.MongoClient(MONGO_URI)
 types_collection = client.db.types
 
-newValues = {
+defaultConstantValues = {
     "oficial": {
         "buy": 0,
         "sell": 0,
@@ -52,11 +52,22 @@ newValues = {
     "creationDate": datetime.now()
 }
 
+# Return a shallow copy
+# NOTE(hotfix): something strange is happening, default values are changing in the lifecyle
+
+def setupDefaultValues():
+    defaultValues = defaultConstantValues.copy()
+
+    return defaultValues
+
+
+
 # A function that parse soup elements to 'newValues' object
 
 
 def soupResponseParser(soupValuesElements):
     valuesTypes = getTypesFromDbToList()
+    newValues = setupDefaultValues()
     for soupValueElement in soupValuesElements:
         if soupValueElement:
             title = soupValueElement.previous
@@ -121,6 +132,8 @@ def soupResponseParser(soupValuesElements):
 
                         newValues["solidario"]["name"] = valuesTypes[4]["name"]
                         newValues["solidario"]["_id"] = valuesTypes[4]["_id"]
+
+    newValues["creationDate"] = datetime.now()
 
     return newValues
 
