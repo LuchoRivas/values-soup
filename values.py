@@ -77,7 +77,11 @@ def soupResponseParser(soupValuesElements):
                     extractIntegerFromText = re.findall(
                         r"[-+]?(?:\d*\.\d+|\d+)", content.text
                     )
-                    finalPrice = float(extractIntegerFromText[0])
+                    if len(extractIntegerFromText) > 0:
+                        finalPrice = float(extractIntegerFromText[0])
+
+                    else:
+                        finalPrice = 0
 
                     if title == VALUE_TYPES.TYPE_BLUE.value:
                         if content.text.startswith(VALUE_ACTIONS.ACTION_BUY.value):
